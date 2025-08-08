@@ -313,8 +313,8 @@ présentant les services, promotions, événements, avec formulaire de contact c
 
   downloadCV(): void {
     const link = document.createElement('a');
-    link.href = 'assets/files/Idy_Adama_Sy_CV.pdf';
-    link.download = 'Idy_Adama_Sy_CV.pdf';
+    link.href = 'assets/files/CV-professionnel-Idy-Adama-Sy.pdf';
+    link.download = 'CV-professionnel-Idy-Adama-Sy.pdf';
     link.click();
   }
 
