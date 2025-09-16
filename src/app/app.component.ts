@@ -9,6 +9,7 @@ import { NgForOf, NgIf } from "@angular/common";
   standalone: true,
   imports: [
     NgForOf,
+    NgIf,
   ],
   animations: [
     trigger('fadeInUp', [
@@ -112,6 +113,12 @@ présentant les services, promotions, événements, avec formulaire de contact c
   ];
 
   projects = [
+    {
+      title: 'SODEGI',
+      description: 'Solution de Développement et de Gestion Immobilière spécialisée dans la rénovation et les finitions haut de gamme. Site web conçu avec Angular pour présenter les services, projets et informations de contact de SODEGI : https://www.sodegi.com',
+      icon: 'fas fa-paint-roller',
+      technologies: ['Angular', 'TypeScript', 'Bootstrap', 'Responsive Design'],
+    },
     {
       title: 'ERP Auto-École',
       description: 'Application ERP interne pour une auto-école, avec gestion complète des étudiants, moniteurs, paiements, examens et statistiques.',
@@ -266,6 +273,9 @@ présentant les services, promotions, événements, avec formulaire de contact c
 
   scrollToSection(sectionId: string): void {
     this.activeSection = sectionId;
+
+    if (typeof document === 'undefined') return;
+
     const element = document.getElementById(sectionId);
     if (element) {
       const navbar = document.querySelector('.navbar') as HTMLElement;
@@ -305,10 +315,6 @@ présentant les services, promotions, événements, avec formulaire de contact c
         sectionObserver.observe(section);
       });
     }, 100);
-  }
-
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   downloadCV(): void {
@@ -439,6 +445,110 @@ présentant les services, promotions, événements, avec formulaire de contact c
       } else {
         alert('Veuillez remplir tous les champs.');
       }
+    }
+  }
+
+
+  // Toggle du menu hamburger
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    console.log('Menu mobile ouvert:', this.isMobileMenuOpen);
+
+    // Gestion du scroll du body
+    if (typeof document !== 'undefined') {
+      const body = document.body;
+
+      if (this.isMobileMenuOpen) {
+        body.classList.add('menu-open');
+        body.style.overflow = 'hidden';
+      } else {
+        body.classList.remove('menu-open');
+        body.style.overflow = 'auto';
+      }
+    }
+  }
+
+
+// Méthode améliorée pour fermer le menu mobile
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+
+    // Vérifier que nous sommes côté client
+    if (typeof document === 'undefined') return;
+
+    const body = document.body;
+    const html = document.documentElement;
+
+    body.classList.remove('menu-open');
+    body.style.overflow = 'auto';
+    html.style.overflow = 'auto';
+
+    // Restaurer le zoom normal sur iOS
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+    }
+  }
+
+// AJOUT : Gestion améliorée des événements touch pour mobile
+  private touchStartY = 0;
+  private touchEndY = 0;
+
+  @HostListener('document:touchstart', ['$event'])
+  onDocumentTouchStart(event: TouchEvent): void {
+    // Ne traiter les événements touch que si le menu est ouvert
+    if (!this.isMobileMenuOpen) return;
+
+    this.touchStartY = event.touches[0].clientY;
+  }
+
+  @HostListener('document:touchmove', ['$event'])
+  onDocumentTouchMove(event: TouchEvent): void {
+    // Empêcher le scroll du body quand le menu est ouvert
+    if (this.isMobileMenuOpen) {
+      event.preventDefault();
+    }
+  }
+
+  @HostListener('document:touchend', ['$event'])
+  onDocumentTouchEnd(event: TouchEvent): void {
+    if (!this.isMobileMenuOpen) return;
+
+    this.touchEndY = event.changedTouches[0].clientY;
+    const swipeThreshold = 50;
+    const swipeDistance = this.touchStartY - this.touchEndY;
+
+    // Fermer le menu si on swipe vers le haut
+    if (swipeDistance > swipeThreshold) {
+      this.closeMobileMenu();
+    }
+  }
+
+// AJOUT : Méthode pour gérer les clics en dehors du menu
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    // Vérifier que nous sommes côté client
+    if (typeof document === 'undefined') return;
+
+    const target = event.target as HTMLElement;
+    const navLinks = document.querySelector('.nav-links');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    // Si on clique en dehors du menu et du bouton hamburger, fermer le menu
+    if (this.isMobileMenuOpen &&
+      navLinks &&
+      !navLinks.contains(target) &&
+      mobileMenu &&
+      !mobileMenu.contains(target)) {
+      this.closeMobileMenu();
+    }
+  }
+
+// AJOUT : Gérer la touche Escape pour fermer le menu
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapeKey(): void {
+    if (this.isMobileMenuOpen) {
+      this.closeMobileMenu();
     }
   }
 }

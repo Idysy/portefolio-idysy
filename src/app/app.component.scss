@@ -63,6 +63,7 @@ body {
 }
 
 // Navigation
+// Navigation - CORRECTIONS POUR LE MENU HAMBURGER
 .navbar {
   position: fixed;
   top: 0;
@@ -97,6 +98,7 @@ body {
     list-style: none;
     gap: 2rem;
 
+    // Styles desktop normaux
     a {
       color: $text-secondary;
       text-decoration: none;
@@ -104,7 +106,7 @@ body {
       cursor: pointer;
       padding: 0.5rem 1rem;
       border-radius: 25px;
-      @include transition(all);
+      transition: all 0.3s ease;
 
       &:hover,
       &.active {
@@ -112,6 +114,11 @@ body {
         background: linear-gradient(135deg, $primary-color, $secondary-color);
         box-shadow: 0 5px 15px rgba($primary-color, 0.4);
       }
+    }
+
+    // Styles desktop seulement
+    @media (min-width: 769px) {
+      display: flex;
     }
   }
 
@@ -121,32 +128,104 @@ body {
     cursor: pointer;
     z-index: 1002;
     position: relative;
-    padding: 5px;
+    padding: 8px;
+    border-radius: 8px;
+    min-width: 48px;
+    min-height: 48px;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 
     span {
-      width: 25px;
+      width: 28px;
       height: 3px;
       background: $text-primary;
-      margin: 3px 0;
-      @include transition(all, 0.3s);
+      margin: 4px 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: block;
+      transform-origin: center;
+      border-radius: 2px;
     }
 
+    // CORRECTION: Animation plus fluide et naturelle
     &.active {
       span {
         &:nth-child(1) {
-          transform: rotate(45deg) translate(5px, 5px);
+          transform: rotate(45deg) translate(7px, 7px);
           background: $primary-color;
         }
         &:nth-child(2) {
           opacity: 0;
+          transform: scaleX(0);
         }
         &:nth-child(3) {
-          transform: rotate(-45deg) translate(7px, -6px);
+          transform: rotate(-45deg) translate(7px, -7px);
           background: $primary-color;
         }
       }
     }
+
+    // Effet hover pour desktop
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      display: flex;
+      
+      // Zone de touch plus grande sur mobile
+      min-width: 52px;
+      min-height: 52px;
+      padding: 10px;
+      
+      span {
+        width: 30px;
+        height: 4px;
+      }
+    }
+  }
+}
+
+// Empêcher le scroll du body quand le menu est ouvert
+body.menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+// Améliorations pour les appareils mobiles
+@media (max-width: 768px) {
+  // Optimisation du viewport pour mobile
+  html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  // Amélioration des interactions tactiles
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  // Permettre la sélection de texte pour les liens et inputs
+  a, input, textarea, button {
+    -webkit-user-select: auto;
+    -khtml-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
   }
 }
 
@@ -548,7 +627,7 @@ body {
 // Testimonials Section
 .testimonials-section {
   padding: 5rem 0;
-  background: $background-dark;
+  background: $background-light;
 
   .testimonials-grid {
     display: grid;
@@ -607,7 +686,7 @@ body {
 // Services Section
 .services-page {
   padding: 5rem 0;
-  background: $background-light;
+  background: $background-dark;
 
   .services-grid {
     display: grid;
@@ -910,14 +989,14 @@ body {
       left: -100%;
       width: 100%;
       height: 100vh;
-      background: rgba(10, 10, 10, 0.98);
-      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.95);
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 3rem;
-      @include transition(left, 0.3s);
+      gap: 2rem;
+      transition: left 0.3s ease;
       z-index: 1001;
+      padding: 2rem 0;
 
       &.active {
         left: 0;
@@ -926,7 +1005,12 @@ body {
       li {
         opacity: 0;
         transform: translateY(20px);
-        @include transition(all, 0.3s);
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+        pointer-events: auto;
+        position: relative;
+        z-index: 1002;
       }
 
       &.active li {
@@ -934,13 +1018,45 @@ body {
         transform: translateY(0);
 
         &:nth-child(1) { transition-delay: 0.1s; }
-        &:nth-child(2) { transition-delay: 0.2s; }
-        &:nth-child(3) { transition-delay: 0.3s; }
+        &:nth-child(2) { transition-delay: 0.15s; }
+        &:nth-child(3) { transition-delay: 0.2s; }
+        &:nth-child(4) { transition-delay: 0.25s; }
+        &:nth-child(5) { transition-delay: 0.3s; }
+        &:nth-child(6) { transition-delay: 0.35s; }
+        &:nth-child(7) { transition-delay: 0.4s; }
       }
 
       a {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         padding: 1rem 2rem;
+        display: block;
+        width: 80%;
+        max-width: 300px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        color: $text-primary;
+        text-decoration: none;
+        font-weight: 600;
+        pointer-events: auto;
+        cursor: pointer;
+        position: relative;
+        z-index: 1003;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        
+        &:hover {
+          background: rgba($primary-color, 0.2);
+          color: $primary-color;
+          transform: scale(1.05);
+        }
+        
+        &.active {
+          background: rgba($primary-color, 0.3);
+          color: $primary-color;
+          border: 2px solid $primary-color;
+        }
       }
     }
 

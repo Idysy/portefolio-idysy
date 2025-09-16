@@ -2,18 +2,82 @@
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">Idy Sy</div>
-    <ul class="nav-links" [class.active]="isMobileMenuOpen || null">
-      <li><a href="#home" (click)="scrollToSection('home'); $event.preventDefault(); isMobileMenuOpen = false;" [class.active]="activeSection === 'home'">Accueil</a></li>
-      <li><a href="#services" (click)="scrollToSection('services'); $event.preventDefault(); isMobileMenuOpen = false;" [class.active]="activeSection === 'services'">Services</a></li>
-      <li><a href="#contact" (click)="scrollToSection('contact'); $event.preventDefault(); isMobileMenuOpen = false;" [class.active]="activeSection === 'contact'">Contact</a></li>
+    <ul class="nav-links"
+        id="mobile-navigation"
+        [class.active]="isMobileMenuOpen"
+        role="navigation"
+        aria-label="Menu principal">
+      <li>
+        <a href="#home"
+           (click)="scrollToSection('home'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'home'">
+          Accueil
+        </a>
+      </li>
+      <li>
+        <a href="#competences"
+           (click)="scrollToSection('competences'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'competences'">
+          Compétences
+        </a>
+      </li>
+      <li>
+        <a href="#experiences"
+           (click)="scrollToSection('experience'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'experience'">
+          Expériences
+        </a>
+      </li>
+      <li>
+        <a href="#realisations"
+           (click)="scrollToSection('realisations'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'realisations'">
+          Réalisations
+        </a>
+      </li>
+      <li>
+        <a href="#services"
+           (click)="scrollToSection('services'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'services'">
+          Services
+        </a>
+      </li>
+      <li>
+        <a href="#temoignages"
+           (click)="scrollToSection('temoignages'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'temoignages'">
+          Témoignages
+        </a>
+      </li>
+      <li>
+        <a href="#contact"
+           (click)="scrollToSection('contact'); closeMobileMenu(); $event.preventDefault()"
+           [class.active]="activeSection === 'contact'">
+          Contact
+        </a>
+      </li>
     </ul>
-    <div class="mobile-menu" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+    <!-- Bouton hamburger mobile -->
+    <button class="mobile-menu"
+            type="button"
+            (click)="toggleMobileMenu()"
+            [class.active]="isMobileMenuOpen"
+            [attr.aria-expanded]="isMobileMenuOpen"
+            [attr.aria-label]="isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"
+            [attr.aria-controls]="'mobile-navigation'">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
   </div>
 </nav>
+
+<!-- Overlay pour fermer le menu en cliquant à l'extérieur -->
+<div class="mobile-overlay"
+     *ngIf="isMobileMenuOpen"
+     (click)="closeMobileMenu()"
+     style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
 
 <!-- Home Section -->
 <section id="home" class="section">
@@ -38,7 +102,7 @@
   </div>
 
   <!-- Skills Section -->
-  <div class="skills-section">
+  <div id="competences" class="skills-section">
     <div class="container">
       <h2 class="section-title">Mes Compétences</h2>
       <div class="skills-grid">
@@ -56,9 +120,9 @@
   </div>
 
   <!-- Experience Section -->
-  <div class="experience-section">
+  <div id="experience" class="experience-section">
     <div class="container">
-      <h2 class="section-title">Mon Expérience</h2>
+      <h2 class="section-title">Mes Expériences</h2>
       <div class="timeline">
         <div class="timeline-item" *ngFor="let exp of experiences" [@fadeInUp]>
           <div class="timeline-date">{{ exp.period }}</div>
@@ -71,9 +135,9 @@
   </div>
 
   <!-- Projects Section -->
-  <div class="projects-section">
+  <div id="realisations" class="projects-section">
     <div class="container">
-      <h2 class="section-title">Mes Projets</h2>
+      <h2 class="section-title">Mes Réalisations</h2>
       <div class="projects-grid">
         <div class="project-card" *ngFor="let project of projects" [@fadeInUp]>
           <div class="project-image">
@@ -86,20 +150,6 @@
               <span class="tech-tag" *ngFor="let tech of project.technologies">{{ tech }}</span>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Testimonials Section -->
-  <div class="testimonials-section">
-    <div class="container">
-      <h2 class="section-title">Témoignages</h2>
-      <div class="testimonials-grid">
-        <div class="testimonial-card" *ngFor="let testimonial of testimonials" [@fadeInUp]>
-          <p class="testimonial-text">"{{ testimonial.text }}"</p>
-          <div class="testimonial-author">{{ testimonial.author }}</div>
-          <div class="testimonial-role">{{ testimonial.role }}</div>
         </div>
       </div>
     </div>
@@ -121,6 +171,21 @@
       </div>
     </div>
   </div>
+
+</section>
+
+<!-- Testimonials Section -->
+<section id="temoignages" class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title">Témoignages</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card" *ngFor="let testimonial of testimonials" [@fadeInUp]>
+          <p class="testimonial-text">"{{ testimonial.text }}"</p>
+          <div class="testimonial-author">{{ testimonial.author }}</div>
+          <div class="testimonial-role">{{ testimonial.role }}</div>
+        </div>
+      </div>
+    </div>
 </section>
 
 <!-- Contact Section -->
